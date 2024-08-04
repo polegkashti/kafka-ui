@@ -8,21 +8,18 @@ import { ACLFormProps, ACLType, AclDetailedFormProps } from './types';
 import { ACLTypeOptions } from './constants';
 import * as S from './Form.styled';
 import ACLFormContext from './AclFormContext';
+import PageLoader from 'components/common/PageLoader/PageLoader';
 
 const DETAILED_FORM_COMPONENTS: Record<
   keyof typeof ACLType,
   FC<AclDetailedFormProps>
 > = {
-  [ACLType.CUSTOM_ACL]: React.lazy(() => import('./CustomACL/Form')),
-  [ACLType.FOR_CONSUMERS]: React.lazy(() => import('./ForConsumers/Form')),
   [ACLType.FOR_PRODUCERS]: React.lazy(() => import('./ForProducers/Form')),
-  [ACLType.FOR_KAFKA_STREAM_APPS]: React.lazy(
-    () => import('./ForKafkaStreamApps/Form')
-  ),
+  [ACLType.FOR_CONSUMERS]: React.lazy(() => import('./ForConsumers/Form'))
 };
 
 const ACLForm: FC<ACLFormProps> = ({ isOpen: open }) => {
-  const [aclType, setAclType] = useState(ACLType.CUSTOM_ACL);
+  const [aclType, setAclType] = useState(ACLType.FOR_PRODUCERS);
   const formContext = useContext(ACLFormContext);
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -47,7 +44,7 @@ const ACLForm: FC<ACLFormProps> = ({ isOpen: open }) => {
             onChange={(option) => setAclType(option as ACLType)}
           />
         </S.Field>
-        <Suspense fallback={<div />}>
+        <Suspense fallback={<PageLoader />}>
           <DetailedForm formRef={formRef} />
         </Suspense>
       </S.Content>
