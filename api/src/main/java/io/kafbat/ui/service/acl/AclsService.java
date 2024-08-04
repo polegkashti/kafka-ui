@@ -158,7 +158,7 @@ public class AclsService {
         .then();
   }
 
-  //Read, Describe on topics, Read on consumerGroups
+  //Read, Describe on topics, ALL on consumerGroups
   private List<AclBinding> createConsumerBindings(CreateConsumerAclDTO request) {
     List<AclBinding> bindings = new ArrayList<>();
     bindings.addAll(
@@ -172,7 +172,7 @@ public class AclsService {
     bindings.addAll(
         createAllowBindings(
             GROUP,
-            List.of(READ),
+            List.of(ALL),
             request.getPrincipal(),
             request.getHost(),
             request.getConsumerGroupsPrefix(),
@@ -199,14 +199,17 @@ public class AclsService {
             request.getTopicsPrefix(),
             request.getTopics()));
 
-    bindings.addAll(
-        createAllowBindings(
-            TRANSACTIONAL_ID,
-            List.of(WRITE, DESCRIBE),
-            request.getPrincipal(),
-            request.getHost(),
-            request.getTransactionsIdPrefix(),
-            Optional.ofNullable(request.getTransactionalId()).map(List::of).orElse(null)));
+    if (request.getTransactionsIdPrefix() != null && !request.getTransactionsIdPrefix().isEmpty() 
+        || request.getTransactionalId() != null && !request.getTransactionalId().isEmpty()) {
+      bindings.addAll(
+          createAllowBindings(
+              TRANSACTIONAL_ID,
+              List.of(WRITE, DESCRIBE),
+              request.getPrincipal(),
+              request.getHost(),
+              request.getTransactionsIdPrefix(),
+              Optional.ofNullable(request.getTransactionalId()).map(List::of).orElse(null)));
+    }
 
     if (Boolean.TRUE.equals(request.getIdempotent())) {
       bindings.addAll(
