@@ -1,17 +1,11 @@
 import React, { useContext } from 'react';
 import Select from 'components/common/Select/Select';
 import Logo from 'components/common/Logo/Logo';
-import Version from 'components/Version/Version';
-import GitHubIcon from 'components/common/Icons/GitHubIcon';
-import DiscordIcon from 'components/common/Icons/DiscordIcon';
-import AutoIcon from 'components/common/Icons/AutoIcon';
 import SunIcon from 'components/common/Icons/SunIcon';
 import MoonIcon from 'components/common/Icons/MoonIcon';
 import { ThemeModeContext } from 'components/contexts/ThemeModeContext';
-import ProductHuntIcon from 'components/common/Icons/ProductHuntIcon';
 import { Button } from 'components/common/Button/Button';
 import MenuIcon from 'components/common/Icons/MenuIcon';
-
 import UserInfo from './UserInfo/UserInfo';
 import * as S from './NavBar.styled';
 
@@ -19,18 +13,9 @@ interface Props {
   onBurgerClick: () => void;
 }
 
-export type ThemeDropDownValue = 'auto_theme' | 'light_theme' | 'dark_theme';
+export type ThemeDropDownValue = 'light_theme' | 'dark_theme';
 
 const options = [
-  {
-    label: (
-      <>
-        <AutoIcon />
-        <div>Auto theme</div>
-      </>
-    ),
-    value: 'auto_theme',
-  },
   {
     label: (
       <>
@@ -64,14 +49,12 @@ const NavBar: React.FC<Props> = ({ onBurgerClick }) => {
 
           <S.Hyperlink to="/">
             <Logo />
-            kafbat UI
+            Kafka by IDFcTS
           </S.Hyperlink>
 
-          <S.NavbarItem>
-            <Version />
-          </S.NavbarItem>
         </S.NavbarBrand>
       </S.NavbarBrand>
+      <S.NavbarVersion>Version: v1.1.4</S.NavbarVersion>
       <S.NavbarSocial>
         <Select
           options={options}
@@ -79,21 +62,6 @@ const NavBar: React.FC<Props> = ({ onBurgerClick }) => {
           onChange={setThemeMode}
           isThemeMode
         />
-        <S.SocialLink href="https://github.com/kafbat/kafka-ui" target="_blank">
-          <GitHubIcon />
-        </S.SocialLink>
-        <S.SocialLink
-          href="https://discord.com/invite/4DWzD7pGE5"
-          target="_blank"
-        >
-          <DiscordIcon />
-        </S.SocialLink>
-        <S.SocialLink
-          href="https://producthunt.com/products/ui-for-apache-kafka"
-          target="_blank"
-        >
-          <ProductHuntIcon />
-        </S.SocialLink>
         <UserInfo />
       </S.NavbarSocial>
     </S.Navbar>

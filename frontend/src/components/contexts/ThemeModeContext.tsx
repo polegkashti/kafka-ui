@@ -10,26 +10,22 @@ interface ThemeModeContextProps {
 
 export const ThemeModeContext = React.createContext<ThemeModeContextProps>({
   isDarkMode: false,
-  themeMode: 'auto_theme',
+  themeMode: 'light_theme',
   setThemeMode: () => {},
 });
 
 export const ThemeModeProvider: FC<PropsWithChildren<unknown>> = ({
   children,
 }) => {
-  const matchDark = window.matchMedia('(prefers-color-scheme: dark)');
   const [themeMode, setThemeModeState] =
-    React.useState<ThemeDropDownValue>('auto_theme');
+    React.useState<ThemeDropDownValue>('light_theme');
 
   React.useLayoutEffect(() => {
     const mode = localStorage.getItem('mode');
-    setThemeModeState((mode as ThemeDropDownValue) ?? 'auto_theme');
+    setThemeModeState((mode as ThemeDropDownValue) ?? 'light_theme');
   }, [setThemeModeState]);
 
   const isDarkMode = React.useMemo(() => {
-    if (themeMode === 'auto_theme') {
-      return matchDark.matches;
-    }
     return themeMode === 'dark_theme';
   }, [themeMode]);
 

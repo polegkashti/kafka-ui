@@ -83,6 +83,12 @@ export const NavbarItem = styled.div`
   padding: 0.5rem 0.75rem;
 `;
 
+export const NavbarVersion = styled.div`
+  color: ${({ theme }) => theme.input.label.color};
+  font-size: 14px;
+  margin-left: auto;
+`;
+
 export const Hyperlink = styled(Link)(
   ({ theme }) => css`
     position: relative;
@@ -99,7 +105,7 @@ export const Hyperlink = styled(Link)(
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: bold;
-    font-size: 22px;
+    font-size: 15px;
     line-height: 16px;
     color: ${theme.default.color.normal};
 
