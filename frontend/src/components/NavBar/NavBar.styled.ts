@@ -85,7 +85,7 @@ export const NavbarItem = styled.div`
 
 export const NavbarVersion = styled.div`
   color: ${({ theme }) => theme.input.label.color};
-  font-size: 14px;
+  font-size: 12px;
   margin-left: auto;
 `;
 
