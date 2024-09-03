@@ -8,15 +8,17 @@ interface CheckboxProps {
   name: string;
   label: React.ReactNode;
   hint?: string;
+  checked?: boolean;
+  onChange?: (value: boolean) => void; // Add onChange prop
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ name, label, hint }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ name, label, hint, checked, onChange}) => {
   const { register } = useFormContext();
 
   return (
     <div>
       <InputLabel>
-        <input {...register(name)} type="checkbox" />
+        <input {...register && register(name)} type="checkbox" checked={checked} onChange={onChange ? (e) => onChange(e.target.checked) : undefined} />
         {label}
       </InputLabel>
       <InputHint>{hint}</InputHint>

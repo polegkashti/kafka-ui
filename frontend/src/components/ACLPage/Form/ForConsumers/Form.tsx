@@ -49,7 +49,7 @@ const ForConsumersForm: FC<AclDetailedFormProps> = ({ formRef }) => {
   const topicCount = clusterStats?.[0]?.topicCount ?? 0;
   const topics = useTopicsOptions(clusterName, topicCount);
 
-  const consumerGroups = useConsumerGroupsOptions(clusterName, 100);
+  const consumerGroups = useConsumerGroupsOptions(clusterName, 1000);
   const consumerCount = consumerGroups.length;
 
   const onSubmit = async (formData: FormValues) => {

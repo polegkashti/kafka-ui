@@ -30,7 +30,7 @@ export function useConsumerGroups(props: UseConsumerGroupsProps) {
   return useQuery(
     ['clusters', clusterName, 'consumerGroups', rest],
     () => api.getConsumerGroupsPage(props),
-    { suspense: false, keepPreviousData: true }
+    { suspense: true, keepPreviousData: true }
   );
 }
 
