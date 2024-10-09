@@ -38,6 +38,7 @@ type Metrics = WithAuth &
 
 export type ClusterConfigFormValues = {
   name: string;
+  supportUrl: string;
   readOnly: boolean;
   bootstrapServers: BootstrapServer[];
   truststore?: {

@@ -16,7 +16,7 @@ export const Value = styled.span`
   text-overflow: ellipsis;
   max-width: 400px;
   overflow: hidden;
-  white-space: nowrap;
+  white-space: pre;
 `;
 
 export const ButtonsWrapper = styled.div`

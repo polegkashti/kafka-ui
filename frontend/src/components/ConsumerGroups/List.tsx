@@ -16,6 +16,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CONSUMER_GROUP_STATE_TOOLTIPS, PER_PAGE } from 'lib/constants';
 import { useConsumerGroups } from 'lib/hooks/api/consumers';
 import Tooltip from 'components/common/Tooltip/Tooltip';
+import BatchActionsBar from './BatchActionsBar'; // Import the new batch actions bar
 
 const List = () => {
   const { clusterName } = useAppParams<ClusterNameRoute>();
@@ -33,62 +34,55 @@ const List = () => {
     search: searchParams.get('q') || '',
   });
 
-  const columns = React.useMemo<ColumnDef<ConsumerGroup>[]>(
-    () => [
-      {
-        id: ConsumerGroupOrdering.NAME,
-        header: 'Group ID',
-        accessorKey: 'groupId',
-        // eslint-disable-next-line react/no-unstable-nested-components
-        cell: ({ getValue }) => (
-          <LinkCell
-            value={`${getValue<string | number>()}`}
-            to={encodeURIComponent(`${getValue<string | number>()}`)}
+  const columns = React.useMemo<ColumnDef<ConsumerGroup>[]>(() => [
+    {
+      id: ConsumerGroupOrdering.NAME,
+      header: 'Group ID',
+      accessorKey: 'groupId',
+      cell: ({ getValue }) => (
+        <LinkCell
+          value={`${getValue<string | number>()}`}
+          to={encodeURIComponent(`${getValue<string | number>()}`)}
+        />
+      ),
+    },
+    {
+      id: ConsumerGroupOrdering.MEMBERS,
+      header: 'Num Of Members',
+      accessorKey: 'members',
+    },
+    {
+      id: ConsumerGroupOrdering.TOPIC_NUM,
+      header: 'Num Of Topics',
+      accessorKey: 'topics',
+    },
+    {
+      id: ConsumerGroupOrdering.MESSAGES_BEHIND,
+      header: 'Consumer Lag',
+      accessorKey: 'consumerLag',
+      cell: (args) => args.getValue() || 'N/A',
+    },
+    {
+      header: 'Coordinator',
+      accessorKey: 'coordinator.id',
+      enableSorting: false,
+    },
+    {
+      id: ConsumerGroupOrdering.STATE,
+      header: 'State',
+      accessorKey: 'state',
+      cell: (args) => {
+        const value = args.getValue() as ConsumerGroupState;
+        return (
+          <Tooltip
+            value={<TagCell {...args} />}
+            content={CONSUMER_GROUP_STATE_TOOLTIPS[value]}
+            placement="bottom-end"
           />
-        ),
+        );
       },
-      {
-        id: ConsumerGroupOrdering.MEMBERS,
-        header: 'Num Of Members',
-        accessorKey: 'members',
-      },
-      {
-        id: ConsumerGroupOrdering.TOPIC_NUM,
-        header: 'Num Of Topics',
-        accessorKey: 'topics',
-      },
-      {
-        id: ConsumerGroupOrdering.MESSAGES_BEHIND,
-        header: 'Consumer Lag',
-        accessorKey: 'consumerLag',
-        cell: (args) => {
-          return args.getValue() || 'N/A';
-        },
-      },
-      {
-        header: 'Coordinator',
-        accessorKey: 'coordinator.id',
-        enableSorting: false,
-      },
-      {
-        id: ConsumerGroupOrdering.STATE,
-        header: 'State',
-        accessorKey: 'state',
-        // eslint-disable-next-line react/no-unstable-nested-components
-        cell: (args) => {
-          const value = args.getValue() as ConsumerGroupState;
-          return (
-            <Tooltip
-              value={<TagCell {...args} />}
-              content={CONSUMER_GROUP_STATE_TOOLTIPS[value]}
-              placement="bottom-end"
-            />
-          );
-        },
-      },
-    ],
-    []
-  );
+    },
+  ], []);
 
   return (
     <>
@@ -100,17 +94,13 @@ const List = () => {
         columns={columns}
         pageCount={consumerGroups.data?.pageCount || 0}
         data={consumerGroups.data?.consumerGroups || []}
-        emptyMessage={
-          consumerGroups.isSuccess
-            ? 'No active consumer groups found'
-            : 'Loading...'
-        }
+        emptyMessage={consumerGroups.isSuccess ? 'No active consumer groups found' : 'Loading...'}
         serverSideProcessing
         enableSorting
+        enableRowSelection
+        batchActionsBar={BatchActionsBar}
         onRowClick={({ original }) =>
-          navigate(
-            clusterConsumerGroupDetailsPath(clusterName, original.groupId)
-          )
+          navigate(clusterConsumerGroupDetailsPath(clusterName, original.groupId))
         }
         disabled={consumerGroups.isFetching}
       />

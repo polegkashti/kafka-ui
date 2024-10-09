@@ -5,8 +5,11 @@ import SunIcon from 'components/common/Icons/SunIcon';
 import MoonIcon from 'components/common/Icons/MoonIcon';
 import { ThemeModeContext } from 'components/contexts/ThemeModeContext';
 import { Button } from 'components/common/Button/Button';
+import { useSupportUrl } from 'lib/hooks/api/appConfig';
+
 import MenuIcon from 'components/common/Icons/MenuIcon';
 import UserInfo from './UserInfo/UserInfo';
+import External_Link from 'components/common/Icons/ExternalLink';
 import * as S from './NavBar.styled';
 
 interface Props {
@@ -38,6 +41,15 @@ const options = [
 
 const NavBar: React.FC<Props> = ({ onBurgerClick }) => {
   const { themeMode, setThemeMode } = useContext(ThemeModeContext);
+  // const { data: supportUrl } = useSupportUrl();
+
+  const handleSupportRedirect = () => {
+    if (supportUrl) {
+      window.open(supportUrl, '_blank');
+    } else {
+      console.error('Support URL is not defined in environment variables');
+    }
+  };
 
   return (
     <S.Navbar role="navigation" aria-label="Page Header">
@@ -51,11 +63,13 @@ const NavBar: React.FC<Props> = ({ onBurgerClick }) => {
             <Logo />
             Kafka by IDFcTS
           </S.Hyperlink>
-
         </S.NavbarBrand>
       </S.NavbarBrand>
-      <S.NavbarVersion>Version: v1.1.4</S.NavbarVersion>
+      <S.NavbarVersion>v1.1.4</S.NavbarVersion>
       <S.NavbarSocial>
+      <Button buttonType="text" buttonSize="S" onClick={handleSupportRedirect}>
+        Docs<External_Link/>
+      </Button>
         <Select
           options={options}
           value={themeMode}

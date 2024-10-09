@@ -64,6 +64,35 @@ export const useDeleteConsumerGroupMutation = ({
   );
 };
 
+export const useDeleteMultipleConsumerGroupsMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async ({ clusterName, consumerGroups }: { clusterName: string, consumerGroups: string[] }) =>{
+      // Iterate over each consumer group and delete
+      await Promise.all(
+        consumerGroups.map(async (groupId) => {
+          await api.deleteConsumerGroup({ clusterName, id: groupId });
+        })
+      );
+    },
+    {
+      onSuccess: (_data, variables) => {
+        variables.consumerGroups.forEach((groupId: string) => {
+          showSuccessAlert({
+            message: `Consumer group ${groupId} deleted`,
+          });
+        });
+        queryClient.invalidateQueries([
+          'clusters',
+          variables.clusterName,
+          'consumerGroups',
+        ]);
+      },
+    }
+  );
+};
+
 export const useResetConsumerGroupOffsetsMutation = ({
   clusterName,
   consumerGroupID,

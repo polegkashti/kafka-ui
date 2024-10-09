@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ColumnDef, Row } from '@tanstack/react-table';
 import PageHeading from 'components/common/PageHeading/PageHeading';
 import Table from 'components/common/NewTable';
@@ -6,6 +6,7 @@ import { useConfirm } from 'lib/hooks/useConfirm';
 import useAppParams from 'lib/hooks/useAppParams';
 import { useAcls, useDeleteAcl } from 'lib/hooks/api/acl';
 import { ClusterName } from 'lib/interfaces/cluster';
+import { useSearchParams } from 'react-router-dom';
 import {
   Action,
   KafkaAcl,
@@ -14,18 +15,30 @@ import {
   ResourceType,
 } from 'generated-sources';
 import useBoolean from 'lib/hooks/useBoolean';
+import { PER_PAGE } from 'lib/constants';
 import ACLForm from 'components/ACLPage/Form/Form';
 import DeleteIcon from 'components/common/Icons/DeleteIcon';
 import { useTheme } from 'styled-components';
 import ACLFormContext from 'components/ACLPage/Form/AclFormContext';
 import PlusIcon from 'components/common/Icons/PlusIcon';
 import ActionButton from 'components/common/ActionComponent/ActionButton/ActionButton';
+import { ControlPanelWrapper } from 'components/common/ControlPanel/ControlPanel.styled';
+import Search from 'components/common/Search/Search';
 
 import * as S from './List.styled';
 
 const ACList: React.FC = () => {
   const { clusterName } = useAppParams<{ clusterName: ClusterName }>();
-  const { data: aclList } = useAcls(clusterName);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Set default values for pagination
+  const page = 1; // or fetch from state/context
+  const perPage = 1; // or a constant from your constants file
+  const [search, setSearch] = useState(searchParams.get('q') || '');
+
+
+  const { data: aclList } = useAcls({ clusterName, search });
+
   const { deleteResource } = useDeleteAcl(clusterName);
   const modal = useConfirm(true);
   const theme = useTheme();
@@ -35,6 +48,12 @@ const ACList: React.FC = () => {
     setTrue: openFrom,
   } = useBoolean();
   const [rowId, setRowId] = React.useState('');
+
+
+  // Set the search params to the url based on the localStorage value
+  useEffect(() => {
+    setSearch(searchParams.get('q') || '');
+  }, [searchParams]);
 
   const handleDeleteClick = (acl: KafkaAcl | null) => {
     if (acl) {
@@ -162,6 +181,9 @@ const ACList: React.FC = () => {
           <PlusIcon /> Create ACL
         </ActionButton>
       </PageHeading>
+      <ControlPanelWrapper hasInput>
+        <Search placeholder="Search by Principle Name" />
+      </ControlPanelWrapper>
       <Table
         columns={columns}
         data={aclList ?? []}

@@ -6,6 +6,10 @@ import {
 } from 'generated-sources';
 import { QUERY_REFETCH_OFF_OPTIONS } from 'lib/constants';
 
+export function useSupportUrl() {
+  return useQuery(['app', 'supportUrl'], () => api.getSupportUrl(), QUERY_REFETCH_OFF_OPTIONS);
+}
+
 export function useAppInfo() {
   return useQuery(
     ['app', 'info'],

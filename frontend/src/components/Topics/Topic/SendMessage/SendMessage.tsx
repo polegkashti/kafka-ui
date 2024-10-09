@@ -57,7 +57,7 @@ const SendMessage: React.FC<{ closeSidebar: () => void }> = ({
     defaultValues: {
       ...defaultValues,
       partition: Number(partitionOptions[0].value),
-      keepContents: false,
+      keepContents: true,
     },
   });
 

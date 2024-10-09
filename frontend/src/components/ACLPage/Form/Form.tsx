@@ -4,11 +4,12 @@ import Heading from 'components/common/heading/Heading.styled';
 import CloseIcon from 'components/common/Icons/CloseIcon';
 import { Button } from 'components/common/Button/Button';
 
+import PageLoader from 'components/common/PageLoader/PageLoader';
 import { ACLFormProps, ACLType, AclDetailedFormProps } from './types';
 import { ACLTypeOptions } from './constants';
 import * as S from './Form.styled';
+
 import ACLFormContext from './AclFormContext';
-import PageLoader from 'components/common/PageLoader/PageLoader';
 
 const DETAILED_FORM_COMPONENTS: Record<
   keyof typeof ACLType,

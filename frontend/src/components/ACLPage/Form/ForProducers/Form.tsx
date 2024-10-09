@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState, useEffect } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useCreateProducerAcl } from 'lib/hooks/api/acl';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -63,7 +63,7 @@ const ForProducersForm: FC<AclDetailedFormProps> = ({ formRef }) => {
       const data = { ...formData }; // Create a copy of formData
       
       const selectedTopics = data.topics || [];
-      const topicsPrefix = data.topicsPrefix;
+      const { topicsPrefix } = data;
       const allTopicsSelected = selectedTopics.length === topics.length && selectedTopics.length !== 0;
       
       if (selectedTopics.length === 0 && !addAllTopicsChecked && !topicsPrefix) {

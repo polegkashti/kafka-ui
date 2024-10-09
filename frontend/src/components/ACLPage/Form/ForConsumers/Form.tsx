@@ -57,7 +57,7 @@ const ForConsumersForm: FC<AclDetailedFormProps> = ({ formRef }) => {
       const data = { ...formData }; // Create a copy of formData
 
       const selectedTopics = data.topics || [];
-      const { topicsPrefix: topicsPrefix} = data;
+      const { topicsPrefix } = data;
       const allTopicsSelected = selectedTopics.length === topics.length && topics.length !== 0;
 
       const { consumerGroups: selectedConsumerGroup } = data;

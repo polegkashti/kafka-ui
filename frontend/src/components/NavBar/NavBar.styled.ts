@@ -26,7 +26,7 @@ export const NavbarBrand = styled.div`
   align-items: center !important;
   flex-shrink: 0;
   min-height: 3.25rem;
-  padding-left: 8px;
+  padding-left: 0px;
 `;
 
 export const SocialLink = styled.a(
@@ -69,8 +69,8 @@ export const SocialLink = styled.a(
 export const NavbarSocial = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 5px 10px 5px;
+  gap: 0px;
+  margin: 5px 0px 0px 5px;
 `;
 
 export const NavbarItem = styled.div`
@@ -85,8 +85,8 @@ export const NavbarItem = styled.div`
 
 export const NavbarVersion = styled.div`
   color: ${({ theme }) => theme.input.label.color};
-  font-size: 12px;
-  margin-left: auto;
+  font-size: 10px;
+  margin-right: auto;
 `;
 
 export const Hyperlink = styled(Link)(
