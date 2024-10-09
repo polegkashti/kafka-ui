@@ -13,6 +13,7 @@ import io.kafbat.ui.model.rbac.permission.AclAction;
 import io.kafbat.ui.service.acl.AclsService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.acl.AccessControlEntryFilter;
 import org.apache.kafka.common.resource.PatternType;
 import org.apache.kafka.common.resource.ResourcePatternFilter;
 import org.apache.kafka.common.resource.ResourceType;
@@ -67,7 +68,9 @@ public class AclsController extends AbstractController implements AclsApi {
                                                           KafkaAclResourceTypeDTO resourceTypeDto,
                                                           String resourceName,
                                                           KafkaAclNamePatternTypeDTO namePatternTypeDto,
+                                                          String search,
                                                           ServerWebExchange exchange) {
+
     AccessContext context = AccessContext.builder()
         .cluster(clusterName)
         .aclActions(AclAction.VIEW)
@@ -87,7 +90,7 @@ public class AclsController extends AbstractController implements AclsApi {
     return validateAccess(context).then(
         Mono.just(
             ResponseEntity.ok(
-                aclsService.listAcls(getCluster(clusterName), filter)
+                aclsService.listAcls(getCluster(clusterName), filter, search)
                     .map(ClusterMapper::toKafkaAclDto)))
     ).doOnEach(sig -> audit(context, sig));
   }

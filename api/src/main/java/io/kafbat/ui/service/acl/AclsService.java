@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.acl.AccessControlEntry;
+import org.apache.kafka.common.acl.AccessControlEntryFilter;
 import org.apache.kafka.common.acl.AclBinding;
 import org.apache.kafka.common.acl.AclOperation;
 import org.apache.kafka.common.resource.Resource;
@@ -68,10 +69,13 @@ public class AclsService {
         .doOnSuccess(v -> log.info("ACL DELETED: [{}]", aclString));
   }
 
-  public Flux<AclBinding> listAcls(KafkaCluster cluster, ResourcePatternFilter filter) {
+  public Flux<AclBinding> listAcls(KafkaCluster cluster,
+                                   ResourcePatternFilter resourceFilter,
+                                   String principalSearch) {
     return adminClientService.get(cluster)
-        .flatMap(c -> c.listAcls(filter))
+        .flatMap(c -> c.listAcls(resourceFilter))
         .flatMapIterable(acls -> acls)
+        .filter(acl -> principalSearch == null || acl.entry().principal().contains(principalSearch))
         .sort(Comparator.comparing(AclBinding::toString));  //sorting to keep stable order on different calls
   }
 

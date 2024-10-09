@@ -1917,6 +1917,11 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/KafkaAclNamePatternType'
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: OK
@@ -2161,6 +2166,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationConfig'
+
+  /api/config/support-url:
+    get:
+      tags:
+        - ApplicationConfig
+      summary: Gets the support URL for the first Kafka cluster
+      operationId: getSupportUrl
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
     put:
       tags:
         - ApplicationConfig
@@ -4148,6 +4167,8 @@ components:
                       name:
                         type: string
                       bootstrapServers:
+                        type: string
+                      supportUrl:
                         type: string
                       ssl:
                         type: object

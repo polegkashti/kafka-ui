@@ -28,6 +28,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.http.codec.multipart.Part;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -78,6 +79,17 @@ public class ApplicationConfigController extends AbstractController implements A
                 .properties(MAPPER.toDto(dynamicConfigOperations.getCurrentProperties()))
         )))
         .doOnEach(sig -> audit(context, sig));
+  }
+
+  @Override
+  public Mono<ResponseEntity<String>> getSupportUrl(ServerWebExchange exchange) {
+    var kafkaClusters = dynamicConfigOperations.getCurrentProperties().getKafka().getClusters();
+    
+    String supportUrl = kafkaClusters != null && !kafkaClusters.isEmpty()
+        ? kafkaClusters.get(0).getSupportUrl()
+        : null;
+
+    return Mono.just(ResponseEntity.ok(supportUrl));
   }
 
   @Override
