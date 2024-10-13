@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import DiscordIcon from 'components/common/Icons/DiscordIcon';
 import GitHubIcon from 'components/common/Icons/GitHubIcon';
 import ProductHuntIcon from 'components/common/Icons/ProductHuntIcon';
+import Select from 'components/common/Select/Select';
 
 export const Navbar = styled.nav(
   ({ theme }) => css`
@@ -118,3 +119,8 @@ export const Hyperlink = styled(Link)(
     cursor: pointer;
   `
 );
+
+// Add the new styled component for Select with custom padding
+export const NoPaddingSelect = styled(Select)`
+  padding-left: 0 !important;
+`;

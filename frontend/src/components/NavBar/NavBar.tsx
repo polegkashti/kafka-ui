@@ -41,7 +41,7 @@ const options = [
 
 const NavBar: React.FC<Props> = ({ onBurgerClick }) => {
   const { themeMode, setThemeMode } = useContext(ThemeModeContext);
-  // const { data: supportUrl } = useSupportUrl();
+  const { data: supportUrl } = useSupportUrl();
 
   const handleSupportRedirect = () => {
     if (supportUrl) {
@@ -68,13 +68,13 @@ const NavBar: React.FC<Props> = ({ onBurgerClick }) => {
       <S.NavbarVersion>v1.1.4</S.NavbarVersion>
       <S.NavbarSocial>
       <Button buttonType="text" buttonSize="S" onClick={handleSupportRedirect}>
-        Docs<External_Link/>
+        Docs <External_Link/>
       </Button>
-        <Select
+        <S.NoPaddingSelect
           options={options}
           value={themeMode}
-          onChange={setThemeMode}
-          isThemeMode
+          onChange={(option) => setThemeMode(option as string | number)}
+          isThemeMode={true}
         />
         <UserInfo />
       </S.NavbarSocial>

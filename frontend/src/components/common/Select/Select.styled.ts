@@ -35,7 +35,7 @@ export const Select = styled.ul<Props>`
   border-radius: 4px;
   font-size: 14px;
   width: fit-content;
-  padding-left: 0px;
+  padding-left: 16px;
   padding-right: 12px;
   color: ${({ theme, disabled }) =>
     disabled ? theme.select.color.disabled : theme.select.color.normal};
