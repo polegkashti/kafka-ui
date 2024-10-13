@@ -28,7 +28,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.http.codec.multipart.Part;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -57,6 +56,7 @@ public class ApplicationConfigController extends AbstractController implements A
     }
   }
 
+  private final ClustersProperties clustersProperties;
   private final DynamicConfigOperations dynamicConfigOperations;
   private final ApplicationRestarter restarter;
   private final KafkaClusterFactory kafkaClusterFactory;
@@ -83,10 +83,11 @@ public class ApplicationConfigController extends AbstractController implements A
 
   @Override
   public Mono<ResponseEntity<String>> getSupportUrl(ServerWebExchange exchange) {
-    var kafkaClusters = dynamicConfigOperations.getCurrentProperties().getKafka().getClusters();
-    
-    String supportUrl = kafkaClusters != null && !kafkaClusters.isEmpty()
-        ? kafkaClusters.get(0).getSupportUrl()
+    var clusters = clustersProperties.getClusters();
+
+    // Check if clusters are available and extract the support URL from the first one
+    String supportUrl = clusters != null && !clusters.isEmpty()
+        ? clusters.get(0).getSupportUrl()
         : null;
 
     return Mono.just(ResponseEntity.ok(supportUrl));
